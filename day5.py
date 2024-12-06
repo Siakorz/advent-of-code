@@ -1,5 +1,5 @@
 import math
-with open("inputs/temp.txt") as f:
+with open("inputs/inputDay5.txt") as f:
     rules, updates = [], []
     for line in f:
         if "|" in line:
@@ -8,12 +8,13 @@ with open("inputs/temp.txt") as f:
             updates.append(line.replace("\n", "").split(","))
 
 def tryToFix(mainValueId, comparedValue, isBigger, line):
-    temp: list = line.copy()
+    temp = []
     for x in range(len(line)):
+        temp.append(line[x])
         if line[x] == comparedValue:
             comparedValueId = x
     temp.pop(comparedValueId)
-    temp.insert(mainValueId + 1 if isBigger else mainValueId, comparedValue)
+    temp.insert(mainValueId, comparedValue)
     return temp
     
     
@@ -33,20 +34,31 @@ def check(line):
         for r in range(len(rules)):
             if line[i] == rules[r][0]:
                 if not checkPositions(i, rules[r][1], True, line):
-                    return False
-    return True
+                    return [i, rules[r][1], True]
+    return False
 
 def returnMiddle(line):
     mid = math.floor(len(line)/2)
     return int(line[mid])
 
-correctUptades, middleValue, incorrectUpdates = [], 0, []
+correctUptades, middleValue, correctedValue, corrected = [], 0, 0, []
 for line in updates:
-    if check(line):
+    if not check(line):
         correctUptades.append(line)
-
-        
+    else:
+        a = check(line)
+        temp = tryToFix(a[0], a[1], a[2], line)
+        for i in range(10000):
+            a = check(temp)
+            if not a:
+                corrected.append(temp)
+                break;
+            temp = tryToFix(a[0], a[1], a[2], temp)
 
 for line in correctUptades:
     middleValue += returnMiddle(line)
+for line in corrected:
+    correctedValue += returnMiddle(line)
+    
 print(middleValue)
+print(correctedValue)
