@@ -1,3 +1,6 @@
+import time
+startTime = time.time()
+
 with open("inputs/inputDay9.txt", "r") as f:
     diskMap, layout, fileId = [], [], 0
     for line in f:
@@ -13,7 +16,7 @@ for i in range(len(diskMap)):
         for j in range(int(diskMap[i])):
             layout.append(".")
 
-def rearange(i ,j, length, toInsert):
+def reOrder(i ,j, length, toInsert):
     for z in range(j, j+length+1):
         layout[z] = toInsert
     while length >= 0:
@@ -28,13 +31,13 @@ def searchForSpace(i, length):
             temp = 0
             z = j
             if length == 0:
-                rearange(i, z, length, layout[i])
+                reOrder(i, z, length, layout[i])
                 return True
             while layout[j] == ".":
                 temp += 1
                 j += 1
                 if temp >= length and layout[j] == "." and layout[z] == ".":
-                    rearange(i, z, length, layout[i])
+                    reOrder(i, z, length, layout[i])
                     return True
                 if temp >= length:
                     break
@@ -59,3 +62,4 @@ for i in range(len(layout)):
         checkSum += i * layout[i]
 
 print(checkSum)
+print(f"======={time.time() - startTime}=======")

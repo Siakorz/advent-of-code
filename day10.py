@@ -24,9 +24,6 @@ def nextStep(start, height):
     return [down, up, right, left, start]
 
 def lookForTrailHead(startPos, trail, height):
-    if height == 10:
-        return 0
-    
     if height == 9:
         if [startPos, trail[4]] not in reached9:
             reached9.append([startPos, trail[4]])
